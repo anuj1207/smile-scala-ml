@@ -1,36 +1,64 @@
 package ml.knoldus
 
-import java.io.FileInputStream
-
-import smile.classification.DecisionTree
-
-import smile.data.parser.ArffParser
+import smile.classification.DecisionTree.SplitRule.ENTROPY
 import smile.classification.cart
+import smile.read
 
 object DecisionTreeApp extends App{
 
-  val arffParser = new ArffParser()
-  arffParser.setResponseIndex(4)
-  val weather = arffParser.parse(new FileInputStream("src/main/resources/weather.nominal.arff"))
-  val x = weather.toArray(Array(new Array[Double](weather.size())))
-  val y = weather.toArray(new Array[Int](weather.size()))
+  val weather = read.arff("src/main/resources/weather.nominal.arff", 4)/*returns object of attributeDataSet*/
 
-  val dTree = cart(x, y, 200, weather.attributes(), DecisionTree.SplitRule.ENTROPY)
+  val trainingInstances = weather.toArray(Array(new Array[Double](weather.size())))/*finds Array training instances
+  //ex Array(Array(sunny,hot,high,false,no)....) but in double type like sunny is replaced by 0 its index
+  //if data is like @attribute outlook{sunny, overcast, rainy}*/
 
-  val tree = dTree.dot()
-  println(tree)
+  val responseInstances = weather.toArray(new Array[Int](weather.size()))/*returns responses for a single array
+  *ex Array(yes, no....) in Int type like yes is replced by 0 its index
+  *if data is like @attribute play{yes, no}*/
 
-  val weatherTest = arffParser.parse(new FileInputStream("src/main/resources/weatherTest.nominal.arff"))
-  val x1 = weatherTest.toArray(Array(new Array[Double](weatherTest.size())))
-  val y1 = weatherTest.toArray(new Array[Int](weatherTest.size()))
+  private val maxNodes = 200
+  private val attributes = weather.attributes()
+  private val splitRule = ENTROPY
+  val dTree = cart(trainingInstances, responseInstances, maxNodes, attributes, splitRule)
+  /*cart(classification and regression tree) that takes test data and returns a decision tree
+  //takes training instances (Array of Array of double) 
+  //and response instances(Array of Int) 
+  //and then Array of all attributes that are there in data file using @attribute annotation and the index is set on their order
+  //last is the operation we are performing to get information gain for each attribute on that basis we'll be getting out dTree*/
 
-  val error = x1.zip(y1).count(a => dTree.predict(a._1) != a._2)
-  val decisions = x1.map{
+  val tree = dTree.dot()/*it return graphic representation in Graphviz dot format */
+  println(tree)// here we are printing the decision tree
+  println("\n\ncopy and paste the above on this link to print tree >>>>> http://viz-js.com/\n\n")
+
+  /**training is completed now
+   Testing will start*/
+
+  /*Now again we are parsing a Test file which contains 12 samples with error*/
+  val weatherTest = read.arff("src/main/resources/weatherTest.nominal.arff", 4)
+
+  /*again testInstances is the Array of testInstances where each value is an Array of Double*/
+  val testInstances = weatherTest.toArray(Array(new Array[Double](weatherTest.size())))
+  /*this testResponseInstances is the Array of response values that are in int type*/
+  val testResponseInstances = weatherTest.toArray(new Array[Int](weatherTest.size()))
+
+  /*here we are predicting the responses using predict method of decisionTree
+    * and checking these out puts with the responses provided in test file to check how many error are there in test data file*/
+  val error = testInstances.zip(testResponseInstances).count {
+    case (testInstance, response) => dTree.predict(testInstance) != response
+  }
+
+  println("Number of errors in test data is "+error)
+
+  /*In the following we are using the predict method to find out whether the day is suitable to play or not
+    * here we are using the test instances provided in the test data*/
+  val decisions = testInstances.map{
     dTree.predict(_) match{
       case 0 => "play"
       case 1 => "not playable weather"
     }
   }.toList
-  println("error is "+error)
+
+  /*printing the list of decisions*/
   println(decisions)
 }
+
