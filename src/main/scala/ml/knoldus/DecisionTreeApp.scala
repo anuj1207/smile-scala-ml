@@ -3,6 +3,7 @@ package ml.knoldus
 import smile.classification.DecisionTree.SplitRule.ENTROPY
 import smile.classification.cart
 import smile.read
+import smile.data
 
 object DecisionTreeApp extends App{
 
@@ -12,14 +13,14 @@ object DecisionTreeApp extends App{
   //ex Array(Array(sunny,hot,high,false,no)....) but in double type like sunny is replaced by 0 its index
   //if data is like @attribute outlook{sunny, overcast, rainy}*/
 
-  val responseInstances = weather.toArray(new Array[Int](weather.size()))/*returns responses for a single array
+  val responseVariables = weather.toArray(new Array[Int](weather.size()))/*returns responses for a single array
   *ex Array(yes, no....) in Int type like yes is replced by 0 its index
   *if data is like @attribute play{yes, no}*/
 
   private val maxNodes = 200
   private val attributes = weather.attributes()
   private val splitRule = ENTROPY
-  val dTree = cart(trainingInstances, responseInstances, maxNodes, attributes, splitRule)
+  val dTree = cart(trainingInstances, responseVariables, maxNodes, attributes, splitRule)
   /*cart(classification and regression tree) that takes test data and returns a decision tree
   //takes training instances (Array of Array of double) 
   //and response instances(Array of Int) 
@@ -39,11 +40,11 @@ object DecisionTreeApp extends App{
   /*again testInstances is the Array of testInstances where each value is an Array of Double*/
   val testInstances = weatherTest.toArray(Array(new Array[Double](weatherTest.size())))
   /*this testResponseInstances is the Array of response values that are in int type*/
-  val testResponseInstances = weatherTest.toArray(new Array[Int](weatherTest.size()))
+  val testResponseVariables = weatherTest.toArray(new Array[Int](weatherTest.size()))
 
   /*here we are predicting the responses using predict method of decisionTree
     * and checking these out puts with the responses provided in test file to check how many error are there in test data file*/
-  val error = testInstances.zip(testResponseInstances).count {
+  val error = testInstances.zip(testResponseVariables).count {
     case (testInstance, response) => dTree.predict(testInstance) != response
   }
 
