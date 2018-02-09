@@ -9,25 +9,25 @@
 @data
 sunny,hot,high,FALSE,no
 sunny,hot,high,TRUE,no
-sunny,hot,normal,FALSE,yes      %wrong
-sunny,hot,normal,TRUE,yes       %wrong
+sunny,hot,normal,FALSE,no
+sunny,hot,normal,TRUE,no
 sunny,cool,normal,FALSE,yes
-sunny,cool,high,FALSE,no        %wrong
+sunny,cool,high,FALSE,yes
 sunny,cool,high,TRUE,no
-sunny,cool,normal,TRUE,yes      %wrong
-overcast,hot,high,FALSE,no      %wrong
-overcast,hot,high,TRUE,no       %wrong
+sunny,cool,normal,TRUE,no
+overcast,hot,high,FALSE,yes
+overcast,hot,high,TRUE,yes
 overcast,hot,normal,FALSE,yes
 overcast,hot,normal,TRUE,yes
 overcast,cool,normal,FALSE,yes
-overcast,cool,high,FALSE,no     %wrong
-overcast,cool,high,TRUE,no      %wrong
+overcast,cool,high,FALSE,yes
+overcast,cool,high,TRUE,yes
 overcast,cool,normal,TRUE,yes
 rainy,hot,high,FALSE,no
 rainy,hot,high,TRUE,no
-rainy,hot,normal,FALSE,yes      %wrong
-rainy,hot,normal,TRUE,yes       %wrong
+rainy,hot,normal,FALSE,no
+rainy,hot,normal,TRUE,no
 rainy,cool,normal,FALSE,yes
-rainy,cool,high,FALSE,no        %wrong
+rainy,cool,high,FALSE,yes
 rainy,cool,high,TRUE,no
-rainy,cool,normal,TRUE,yes      %wrong
+rainy,cool,normal,TRUE,no

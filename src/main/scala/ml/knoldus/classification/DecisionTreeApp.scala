@@ -1,9 +1,9 @@
-package ml.knoldus
+package ml.knoldus.classification
 
 import smile.classification.DecisionTree.SplitRule.ENTROPY
 import smile.classification.cart
 import smile.read
-import smile.data
+import smile.validation.test
 
 object DecisionTreeApp extends App{
 
@@ -61,5 +61,7 @@ object DecisionTreeApp extends App{
 
   /*printing the list of decisions*/
   println(decisions)
+
+  val testedRF = test(trainingInstances, responseVariables, testInstances, testResponseVariables)((_, _) => dTree)
 }
 

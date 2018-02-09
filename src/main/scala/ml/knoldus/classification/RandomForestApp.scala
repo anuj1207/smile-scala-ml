@@ -1,9 +1,9 @@
-package ml.knoldus
+package ml.knoldus.classification
 
 import smile.classification._
 import smile.data.AttributeDataset
-import smile.{data, read}
 import smile.validation._
+import smile.{data, read}
 
 object RandomForestApp extends App{
 
